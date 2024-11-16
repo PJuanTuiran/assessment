@@ -9,9 +9,16 @@ use Livewire\Component;
 
 class AppointmentsIndex extends Component
 {
+
     public $search = '';  // Para buscar por paciente, médico o motivo
     public $patient_id, $doctor_id, $date_time, $status, $reason, $appointmentId;
     public $isEditing = false;  // Para distinguir entre crear y editar
+
+    // Determinar si el usuario es un administrador
+    public function getIsAdminProperty()
+    {
+        return auth()->user()->hasRole('Administrador');
+    }
 
     public function render()
     {

@@ -30,15 +30,18 @@
                 <td class="px-4 py-2 border-b text-center">{{ $appointment->date_time }}</td>
                 <td class="px-4 py-2 border-b text-center">{{ $appointment->status }}</td>
                 <td class="px-4 py-2 border-b text-center">
+                    @if(auth()->user()->hasRole('Administrador'))
                     <button wire:click="editAppointment({{ $appointment->id }})" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">Editar</button>
                     <button wire:click="deleteAppointment({{ $appointment->id }})" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700 ml-2">Eliminar</button>
                     <button wire:click="cancelAppointment({{ $appointment->id }})" class="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-700 ml-2">Cancelar</button>
+                    @elseif(auth()->user()->hasRole('Paciente') || auth()->user()->hasRole('Medico'))
+                    <button wire:click="cancelAppointment({{ $appointment->id }})" class="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-700 ml-2">Cancelar</button>
+                    @endif
                 </td>
             </tr>
             @endforeach
         </tbody>
     </table>
-
 
     <!-- Formulario para crear o editar citas -->
     <div class="mt-6 bg-gray-50 p-6 rounded-lg shadow-sm">
