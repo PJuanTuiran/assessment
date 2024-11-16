@@ -20,6 +20,10 @@ return new class extends Migration
             $table->rememberToken();
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
+            $table->string('phone_number')->nullable();
+            $table->date('date_of_birth')->nullable(); // Para pacientes
+            $table->string('specialty')->nullable(); // Para médicos
+            $table->json('availability')->nullable();
             $table->timestamps();
         });
 

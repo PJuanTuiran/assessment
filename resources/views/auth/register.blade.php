@@ -1,60 +1,82 @@
 <x-guest-layout>
-    <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
+    <div class="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-500 to-blue-700 py-12 px-4 sm:px-6 lg:px-8">
+        <!-- Logo Personalizado -->
+        <div class="flex items-center justify-center mb-8">
+            <a href="/" class="flex flex-col items-center">
+                <img src="{{ asset('images/logo-clinica.jpg') }}" alt="Clínica XYZ" class="w-24 h-24 rounded-full shadow-lg">
+                <h1 class="text-3xl font-bold text-white mt-4">Clínica XYZ</h1>
+            </a>
+        </div>
 
-        <x-validation-errors class="mb-4" />
+        <!-- Tarjeta de Registro -->
+        <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6">Registrarse</h2>
 
-        <form method="POST" action="{{ route('register') }}">
-            @csrf
+            <!-- Mostrar errores de validación -->
+            <x-validation-errors class="mb-4" />
 
-            <div>
-                <x-label for="name" value="{{ __('Name') }}" />
-                <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            </div>
+            <!-- Formulario de Registro -->
+            <form method="POST" action="{{ route('register') }}">
+                @csrf
 
-            <div class="mt-4">
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            </div>
+                <!-- Campo de Nombre -->
+                <div class="mb-4">
+                    <x-label for="name" class="block text-sm font-medium text-gray-700" value="{{ __('Nombre') }}" />
+                    <x-input id="name" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+                </div>
 
-            <div class="mt-4">
-                <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            </div>
+                <!-- Campo de Email -->
+                <div class="mb-4">
+                    <x-label for="email" class="block text-sm font-medium text-gray-700" value="{{ __('Correo Electrónico') }}" />
+                    <x-input id="email" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" type="email" name="email" :value="old('email')" required autocomplete="username" />
+                </div>
 
-            <div class="mt-4">
-                <x-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
-                <x-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
-            </div>
+                <!-- Campo de Contraseña -->
+                <div class="mb-4">
+                    <x-label for="password" class="block text-sm font-medium text-gray-700" value="{{ __('Contraseña') }}" />
+                    <x-input id="password" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" type="password" name="password" required autocomplete="new-password" />
+                </div>
 
-            @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
-                <div class="mt-4">
+                <!-- Confirmar Contraseña -->
+                <div class="mb-4">
+                    <x-label for="password_confirmation" class="block text-sm font-medium text-gray-700" value="{{ __('Confirmar Contraseña') }}" />
+                    <x-input id="password_confirmation" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" type="password" name="password_confirmation" required autocomplete="new-password" />
+                </div>
+
+                <!-- Términos y Condiciones -->
+                @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
+                <div class="mb-4">
                     <x-label for="terms">
                         <div class="flex items-center">
                             <x-checkbox name="terms" id="terms" required />
-
-                            <div class="ms-2">
-                                {!! __('I agree to the :terms_of_service and :privacy_policy', [
-                                        'terms_of_service' => '<a target="_blank" href="'.route('terms.show').'" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">'.__('Terms of Service').'</a>',
-                                        'privacy_policy' => '<a target="_blank" href="'.route('policy.show').'" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">'.__('Privacy Policy').'</a>',
+                            <span class="ml-2 text-sm text-gray-600">
+                                {!! __('Acepto los :terms_of_service y la :privacy_policy', [
+                                'terms_of_service' => '<a target="_blank" href="'.route('terms.show').'" class="underline text-blue-600 hover:text-blue-800">'.__('Términos de Servicio').'</a>',
+                                'privacy_policy' => '<a target="_blank" href="'.route('policy.show').'" class="underline text-blue-600 hover:text-blue-800">'.__('Política de Privacidad').'</a>',
                                 ]) !!}
-                            </div>
+                            </span>
                         </div>
                     </x-label>
                 </div>
-            @endif
+                @endif
 
-            <div class="flex items-center justify-end mt-4">
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                    {{ __('Already registered?') }}
-                </a>
+                <!-- Botón de Registro -->
+                <div class="mt-6">
+                    <button type="submit" class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        {{ __('Registrarse') }}
+                    </button>
+                </div>
 
-                <x-button class="ms-4">
-                    {{ __('Register') }}
-                </x-button>
-            </div>
-        </form>
-    </x-authentication-card>
+                <!-- Enlace para Iniciar Sesión -->
+                <div class="mt-4 text-center">
+                    <p class="text-sm text-gray-600">
+                        ¿Ya tienes una cuenta?
+                        <a href="{{ route('login') }}" class="text-blue-600 hover:text-blue-800 font-semibold">
+                            Inicia sesión aquí
+                        </a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
 </x-guest-layout>

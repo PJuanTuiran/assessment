@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
@@ -18,6 +19,7 @@ class User extends Authenticatable
     use HasFactory;
     use HasProfilePhoto;
     use Notifiable;
+    use HasRoles;
     use TwoFactorAuthenticatable;
 
     /**
@@ -29,7 +31,13 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'phone_number',
+        'date_of_birth',
+        'specialty',
+        'availability',
+
     ];
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -63,5 +71,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class, 'patient_id');
+    }
+
+    public function attendedAppointments()
+    {
+        return $this->hasMany(Appointment::class, 'doctor_id');
     }
 }

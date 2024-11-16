@@ -7,29 +7,39 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Jetstream\Jetstream;
+use Spatie\Permission\Models\Role;
 
 class CreateNewUser implements CreatesNewUsers
 {
     use PasswordValidationRules;
 
     /**
-     * Validate and create a newly registered user.
+     * Create a newly registered user.
      *
-     * @param  array<string, string>  $input
+     * @param  array  $input
+     * @return \App\Models\User
      */
-    public function create(array $input): User
+    public function create(array $input)
     {
+        // Validar los datos del usuario
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => $this->passwordRules(),
-            'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ])->validate();
 
-        return User::create([
+        // Crear el usuario
+        $user = User::create([
             'name' => $input['name'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
         ]);
+
+        // Asignar el rol "Paciente" automáticamente
+        if (Role::where('name', 'Paciente')->exists()) {
+            $user->assignRole('Paciente');
+        }
+
+        return $user;
     }
 }
